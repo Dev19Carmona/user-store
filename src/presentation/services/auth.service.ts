@@ -65,7 +65,6 @@ export class AuthService {
     const payload = await jwtAdapter.validateToken(token)
     if (!payload) {
       return HtmlEmailAdapter.htmlValidatedEmailFailure()
-      throw CustomError.unauthorized('Invalid Token')
     }
     const { email, exp, iat } = payload as Payload
     if (!email) throw CustomError.internalServer('Email not in token')

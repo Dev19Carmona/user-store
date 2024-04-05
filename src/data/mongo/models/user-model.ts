@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 const modelName = 'User'
-const Schema = new mongoose.Schema({
+const schema = new mongoose.Schema({
   name: { type: String, required: [true, 'Name is Required'] },
   email: { type: String, required: [true, 'email is Required'], unique: true },
   emailValidated: { type: Boolean, default: false },
@@ -13,4 +13,4 @@ const Schema = new mongoose.Schema({
   },
 })
 
-export const UserModel = mongoose.model(modelName, Schema)
+export const UserModel = mongoose.model(modelName, schema)

@@ -5,7 +5,7 @@ export class jwtAdapter {
   constructor() {}
   static async generateToken(
     payload: any,
-    duration: string = '2h'
+    duration: string = '1m'
   ) {
     return new Promise((resolve) => {
       jwt.sign(
