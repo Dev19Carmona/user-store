@@ -1,15 +1,16 @@
-import { regularExps } from "../../../config"
 
 export class CategoryCreateDto {
   private constructor(
     public readonly name: string,
-    public readonly available: string
+    public readonly available: boolean
   ) {}
   static create(object: { [key: string]: any }): [string?, CategoryCreateDto?] {
-    const { email, password } = object
-    if (!email) return ['Missing email']
-    if (!regularExps.email.test(email)) return ['Email is not valid']
-    if (!password) return ['Missing password']
-    return [undefined, new CategoryCreateDto(email ,password)]
+    const { name, available = false } = object
+    let availableBoolean = available
+    if (!name) return ['Missing name']
+    if (typeof available !== 'boolean') {
+      availableBoolean = available === 'true' ? true : false
+    }
+    return [undefined, new CategoryCreateDto(name, availableBoolean)]
   }
 }

@@ -3,10 +3,7 @@ import { envs } from './envs'
 
 export class jwtAdapter {
   constructor() {}
-  static async generateToken(
-    payload: any,
-    duration: string = '1m'
-  ) {
+  static async generateToken(payload: any, duration: string = '1m') {
     return new Promise((resolve) => {
       jwt.sign(
         payload,
@@ -20,11 +17,11 @@ export class jwtAdapter {
     })
   }
 
-  static validateToken(token: string) {
+  static validateToken<T>(token: string): Promise<T | null> {
     return new Promise((resolve) => {
       jwt.verify(token, envs.JWT_SEED, (err, decoded) => {
         if (err) return resolve(null)
-        resolve(decoded)
+        resolve(decoded as T)
       })
     })
   }

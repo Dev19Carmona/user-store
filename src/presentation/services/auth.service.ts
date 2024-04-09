@@ -50,7 +50,10 @@ export class AuthService {
       const { password: deletedPass, ...session } =
         UserEntity.fromObject(userFound)
       //return info del usuario y el token 'ABC'
-      const token = await jwtAdapter.generateToken(session)
+      const token = await jwtAdapter.generateToken(
+        { id: session.id },
+        envs.SESSION_TTL
+      )
       if (!token) throw CustomError.internalServer('Error while creating JWT')
 
       return {
