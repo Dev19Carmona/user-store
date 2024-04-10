@@ -37,10 +37,9 @@ export class ProductService {
         ProductModel.find()
           .skip((page - 1) * limit)
           .limit(limit)
-          // .populate('user')
-          // .populate('category'),
+          .populate('user')
+          .populate('category'),
       ])
-      console.log(products);
       
       const [error, paginationResponde] = PaginationResponseDto.create({
         page,

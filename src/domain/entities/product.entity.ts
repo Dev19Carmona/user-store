@@ -19,7 +19,6 @@ export class ProductEntity {
     if (!category) throw CustomError.badRequest('Missing category')
     if (typeof isAvailable !== 'boolean')
       throw CustomError.badRequest('Missing available')
-    console.log(user)
     
     return new ProductEntity(
       _id || id,
