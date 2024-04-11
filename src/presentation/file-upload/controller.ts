@@ -14,16 +14,21 @@ export class FileController {
   }
 
   uploadFile = async (req: Request, res: Response) => {
-    
     const type = req.params.type
     const file = req.body.files.at(0) as UploadedFile
-    
+
     this.fileService
-      .uploadSingle(file,`uploads/${type}`)
+      .uploadSingle(file, `uploads/${type}`)
       .then((uploaded) => res.json(uploaded))
       .catch((error) => this.handleError(error, res))
   }
   uploadMultipleFiles = async (req: Request, res: Response) => {
-    res.json({ uploadMultiple: true })
+    const type = req.params.type
+    const files = req.body.files as UploadedFile[]
+
+    this.fileService
+      .uploadMultiple(files, `uploads/${type}`)
+      .then((uploaded) => res.json(uploaded))
+      .catch((error) => this.handleError(error, res))
   }
 }

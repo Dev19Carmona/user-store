@@ -40,9 +40,15 @@ export class FileService {
       throw error
     }
   }
-  public uploadMultiple(
-    file: UploadedFile[],
+  public async uploadMultiple(
+    files: UploadedFile[],
     folder: string = 'uploads',
-    validExtensions: string[]
-  ) {}
+    validExtensions: string[] = ['png', 'jpg', 'jpeg', 'gif']
+  ) {
+    
+    const filesName = await Promise.all(
+      files.map(file => this.uploadSingle(file, folder, validExtensions))
+    )
+    return filesName
+  }
 }
