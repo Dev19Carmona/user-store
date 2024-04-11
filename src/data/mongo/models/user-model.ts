@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
   role: {
     type: [String],
     default: ['USER_ROLE'],
-    enum: ['ADMIN_ROLE', 'USER_ROLE'],
+    enum: ['ADMIN_ROLE', 'USER_ROLE', 'COLLABORATOR_ROLE'],
   },
 })
 schema.set('toJSON', {
@@ -17,7 +17,7 @@ schema.set('toJSON', {
   versionKey: false,
   transform: function(doc, ret, options) {
     delete ret._id
-    // delete ret.password
+    delete ret.password
   },
 })
 export const UserModel = mongoose.model(modelName, schema)
