@@ -34,7 +34,11 @@ export class AuthController {
     const token = req.params.token
     this.authService
       .validateEmail(token)
-      .then((html)=>res.send(html))
+      .then((html) => res.send(html))
       .catch((error) => this.handleError(error, res))
+  }
+  resetPassword = (req: Request, res: Response) => {
+    //TODO Implementar logica para reset password
+    throw 'not implemented yet'
   }
 }
