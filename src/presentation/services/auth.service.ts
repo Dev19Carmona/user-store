@@ -81,6 +81,8 @@ export class AuthService {
     const token = await jwtAdapter.generateToken({ email })
     if (!token) throw CustomError.internalServer('Error getting token')
     const link = `${envs.WEBSERVICE_URL}/${envs.VALIDATE_EMAIL_URL}/${token}`
+  console.log({link});
+  
     const html = HtmlEmailAdapter.htmlValidateEmail(link)
     const options = {
       to: email,
@@ -88,6 +90,7 @@ export class AuthService {
       htmlBody: html,
     }
     const isSent = await this.emailService.sendEmail(options)
+    
     if (!isSent) throw CustomError.internalServer('Error sending email')
 
     return isSent

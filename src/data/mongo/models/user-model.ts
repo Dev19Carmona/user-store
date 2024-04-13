@@ -1,21 +1,22 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 const modelName = 'User'
 const schema = new mongoose.Schema({
   name: { type: String, required: [true, 'Name is Required'] },
   email: { type: String, required: [true, 'email is Required'], unique: true },
   emailValidated: { type: Boolean, default: false },
   password: { type: String, required: [true, 'password is Required'] },
+  schedule: { type: Schema.Types.ObjectId, ref: 'DoctorSchedule' }, 
   img: { type: String },
   role: {
     type: [String],
     default: ['USER_ROLE'],
-    enum: ['ADMIN_ROLE', 'USER_ROLE', 'COLLABORATOR_ROLE'],
+    enum: ['ADMIN_ROLE', 'USER_ROLE', 'COLLABORATOR_ROLE', 'DOCTOR_ROLE'],
   },
 })
 schema.set('toJSON', {
   virtuals: true,
   versionKey: false,
-  transform: function(doc, ret, options) {
+  transform: function (doc, ret, options) {
     delete ret._id
     delete ret.password
   },

@@ -34,16 +34,16 @@ export class EmailService {
     const { to, subject, htmlBody, attachements = [] } = options
 
     try {
-      if (!this.postToProvider) return true
-
+      // if (!this.postToProvider) return true
+      
       const sentInformation = await this.transporter.sendMail({
         to: to,
         subject: subject,
         html: htmlBody,
         attachments: attachements,
       })
-
-      // console.log( sentInformation );
+      if(!sentInformation)return false
+      // console.log( {sentInformation} );
 
       return true
     } catch (error) {
