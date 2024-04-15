@@ -12,6 +12,8 @@ export class AppointmentRoutes {
 
     // Definir las rutas
     router.post('/', [ AuthMiddleware.validateJWT ], controller.createAppointment)
+    router.post('/change-status', [ AuthMiddleware.validateJWT ], controller.changeStatusAppointment)
+    router.get('/pending', [ AuthMiddleware.validateJWT ], controller.getPendingAppointments)
 
     return router
   }

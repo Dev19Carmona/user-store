@@ -48,7 +48,7 @@ export class AppointmentEntity {
       intervalInMilliseconds,
       intervalInSeconds,
     } = object
-    if (!location) throw CustomError.badRequest('Missing name')
+    if (!location) throw CustomError.badRequest('Missing location')
     if (!customer) throw CustomError.badRequest('Missing customer')
     if (!doctor) throw CustomError.badRequest('Missing doctor')
     if (!status) throw CustomError.badRequest('Missing status')
