@@ -5,7 +5,6 @@ const schema = new mongoose.Schema({
   email: { type: String, required: [true, 'email is Required'], unique: true },
   emailValidated: { type: Boolean, default: false },
   password: { type: String, required: [true, 'password is Required'] },
-  schedule: { type: Schema.Types.ObjectId, ref: 'DoctorSchedule' }, 
   img: { type: String },
   role: {
     type: [String],

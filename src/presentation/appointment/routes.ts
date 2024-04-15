@@ -1,17 +1,17 @@
 import { Router } from 'express'
-import { CategoryController } from './controller'
+import { AppointmentController } from './controller'
 import { AuthMiddleware } from '../middlewares'
 import { CategoryService } from '../services/category.service'
+import { AppointmentService } from '../services/appointment.service'
 
-export class CategoryRoutes {
+export class AppointmentRoutes {
   static get routes(): Router {
     const router = Router()
-    const categoryService = new CategoryService()
-    const controller = new CategoryController(categoryService)
+    const appointmentService = new AppointmentService()
+    const controller = new AppointmentController(appointmentService)
 
     // Definir las rutas
-    router.get('/', controller.getCategories)
-    router.post('/', [ AuthMiddleware.validateJWT ], controller.createCategory)
+    router.post('/', [ AuthMiddleware.validateJWT ], controller.createAppointment)
 
     return router
   }
