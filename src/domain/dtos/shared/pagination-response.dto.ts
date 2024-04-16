@@ -29,7 +29,7 @@ export class PaginationResponseDto {
       limitPages > 0 ? `/api/${endpoint}?page=${page + 1}&limit=${limit}` : null
     const prev =
       page - 1 > 0 ? `/api/${endpoint}?page=${page - 1}&limit=${limit}` : null
-
+    
     if (isNaN(page) || isNaN(limit)) return ['Page and limit must be numbers']
     if (page <= 0 || limit <= 0)
       return ['Page and limit must be greater than 0']

@@ -22,18 +22,17 @@ export class AppointmentController {
       .then((newAppointment) => res.status(201).json(newAppointment))
       .catch((error) => this.handleError(error, res))
   }
-  getPendingAppointments = async (req: Request, res: Response) => {
-    const user = req.body.user
+  getStatusAppointments = async (req: Request, res: Response) => {
+    const {user, paginationDto} = req.body
+    const status = req.params.status
     this.appointmentService
-    .getPendingAppointments(user)
+    .getStatusAppointments(user, status, paginationDto)
     .then((appointments) => res.status(201).json(appointments))
     .catch((error) => this.handleError(error, res))
   }
   changeStatusAppointment = async (req: Request, res: Response) => {
     const [error, changeStatusAppointmentDto] = AppointmentChangeStatusDto.create(req.body)
     if (error) return res.status(400).json({ error })
-    console.log(changeStatusAppointmentDto);
-    
     this.appointmentService
     .changeStatusAppointment(changeStatusAppointmentDto!)
     .then((appointment) => res.status(201).json(appointment))

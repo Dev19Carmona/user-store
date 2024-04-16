@@ -25,9 +25,7 @@ export class CategoryController {
   }
 
   getCategories = async (req: Request, res: Response) => {
-    const { page = 1, limit = 10 } = req.query
-    const [error, paginationDto] = PaginationDto.create(+page, +limit)
-    if (error) return res.status(400).json({ error })
+    const paginationDto = req.body.paginationDto
     this.categoryService
       .getCategories(paginationDto!)
       .then((categories) => res.status(200).json(categories))

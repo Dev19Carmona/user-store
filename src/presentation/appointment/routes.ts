@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { AppointmentController } from './controller'
-import { AuthMiddleware } from '../middlewares'
+import { AuthMiddleware, PaginationMiddleware } from '../middlewares'
 import { CategoryService } from '../services/category.service'
 import { AppointmentService } from '../services/appointment.service'
 
@@ -11,10 +11,9 @@ export class AppointmentRoutes {
     const controller = new AppointmentController(appointmentService)
 
     // Definir las rutas
-    router.post('/', [ AuthMiddleware.validateJWT ], controller.createAppointment)
-    router.post('/change-status', [ AuthMiddleware.validateJWT ], controller.changeStatusAppointment)
-    router.get('/pending', [ AuthMiddleware.validateJWT ], controller.getPendingAppointments)
-
+    router.post('/', [AuthMiddleware.validateJWT], controller.createAppointment)
+    router.post('/change-status', [AuthMiddleware.validateJWT], controller.changeStatusAppointment)
+    router.get('/:status', [AuthMiddleware.validateJWT, PaginationMiddleware.createPaginationDto], controller.getStatusAppointments)
     return router
   }
 }

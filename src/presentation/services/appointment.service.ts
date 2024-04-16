@@ -1,18 +1,17 @@
 import { Constants } from '../../config'
-import { AppointmentModel, CategoryModel } from '../../data/mongo/models'
+import { AppointmentModel } from '../../data/mongo/models'
 import { AppointmentCreateDto, CustomError, UserEntity } from '../../domain'
 import { AppointmentChangeStatusDto } from '../../domain/dtos/appointment/change-status-appointment.dto'
-import { CategoryCreateDto } from '../../domain/dtos/category/category-create.dto'
 import { PaginationResponseDto } from '../../domain/dtos/shared/pagination-response.dto'
 import { PaginationDto } from '../../domain/dtos/shared/pagination.dto'
-import { AppointmentEntity, CategoryEntity } from '../../domain/entities'
+import { AppointmentEntity } from '../../domain/entities'
 
-interface GetCategoriesResponse {
+interface GetAppointmentsResponse {
   pagination: PaginationDto
-  categories: CategoryEntity[]
+  appointments: AppointmentEntity[]
 }
 export class AppointmentService {
-  constructor() {}
+  constructor() { }
   public async createAppointment(createAppointmentDto: AppointmentCreateDto) {
     try {
       const newAppointment = await new AppointmentModel(
@@ -24,8 +23,9 @@ export class AppointmentService {
       throw CustomError.internalServer(`${error}`)
     }
   }
-  public async getPendingAppointments(user: UserEntity) {
+  public async getStatusAppointments(user: UserEntity, status: string, paginationDto: PaginationDto): Promise<GetAppointmentsResponse> {
     try {
+      const { page, limit } = paginationDto
       const { id, role } = user
       const endpoint = role.includes(Constants.roles().doctor.key)
         ? 'doctor'
@@ -33,14 +33,33 @@ export class AppointmentService {
 
       const startDate = new Date()
       startDate.setHours(0, 0, 0, 0)
-      const appointments = await AppointmentModel.find({
+      const query = {
         [endpoint]: id,
-        status: 'pending',
+        status,
         startDate: { $gte: startDate },
+      }
+      const [total, appointments] = await Promise.all([
+        AppointmentModel.countDocuments(query),
+        AppointmentModel.find(query)
+          .skip((page - 1) * limit)
+          .limit(limit)
+          .populate('customer')
+          .populate('doctor')
+        ,
+      ])
+      const [error, paginationResponde] = PaginationResponseDto.create({
+        page,
+        limit,
+        total,
+        endpoint: `appointment/${status}`,
       })
-      return appointments.map((appointment) =>
-        AppointmentEntity.fromObject(appointment)
-      )
+      if (error) throw CustomError.badRequest(`${error}`)
+      return {
+        pagination: paginationResponde!,
+        appointments: appointments.map((appointment) =>
+          AppointmentEntity.fromObject(appointment)
+        ),
+      }
     } catch (error) {
       throw CustomError.internalServer(`${error}`)
     }
